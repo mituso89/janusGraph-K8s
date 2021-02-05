@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: graph-explorer-{{ .Release.Name }}-chart-svc
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: graph-explorer-{{ .Release.Name }}-chart-svc
+spec:
+  ports:
+    - name: "http"
+      port: 8888
+      targetPort: 8888
+   
+  selector:
+    app: graph-explorer-{{ .Release.Name }}-dep
+
+status:
+  loadBalancer: {}

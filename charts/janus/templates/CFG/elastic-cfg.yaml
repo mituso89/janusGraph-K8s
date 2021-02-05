@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: elastic-{{ .Release.Name }}-cfg
+  namespace: {{ .Release.Namespace }}
+data:
+  elasticsearch.yml: |
+    ---
+    ## Default Elasticsearch configuration from Elasticsearch base image.
+    ## https://github.com/elastic/elasticsearch/blob/master/distribution/docker/src/docker/config/elasticsearch.yml
+    #
+    cluster.name: {{ .Values.elastic.config.clusterName }}
+    network.host: {{ .Values.elastic.config.networkHost }}
+
+    ## X-Pack settings
+    ## see https://www.elastic.co/guide/en/elasticsearch/reference/current/setup-xpack.html
+    #
+    xpack.license.self_generated.type: {{ .Values.elastic.config.xpackLicense }}
+    xpack.security.enabled: {{ .Values.elastic.config.xpackSecurity }}
+    xpack.monitoring.collection.enabled: {{ .Values.elastic.config.xpackMonitoring }}

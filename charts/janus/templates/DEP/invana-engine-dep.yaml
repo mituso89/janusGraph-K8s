@@ -1,0 +1,33 @@
+apiVersion: apps/v1 ## Kubernetes API Version
+kind: Deployment ## Type of resource
+metadata:
+  name: invana-engine-{{ .Release.Name }}-dep
+  labels:
+    app: invana-engine-{{ .Release.Name }}-dep ## Labels given by user
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels: ## Should be same as spec.template.labels
+      app: invana-engine-{{ .Release.Name }}-dep
+  template:
+    metadata:
+      labels: ## Should be same as spec.selector.matchLabels
+        app: invana-engine-{{ .Release.Name }}-dep
+    spec:
+      containers: # TODO: Add limits & requests
+      - image: invanalabs/invana-engine
+
+        name: invana-engine-{{ .Release.Name }}-chart-cont
+        envFrom:
+        - configMapRef:
+            name: invana-engine-{{ .Release.Name }}-chart-cfg 
+        env:
+        
+        - name: GREMLIN_SERVER_URL
+          value: ws://janus-{{ .Release.Name }}-svc:8182/gremlin
+        
+        ports:
+          - containerPort: 8000
+      
+     

@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cassandra-{{ .Release.Name }}-cfg
+  namespace: {{ .Release.Namespace }}
+data:
+  cassandra.yml: |

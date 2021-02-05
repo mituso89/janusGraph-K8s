@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: global-{{ .Release.Name }}-sct
+  namespace: {{ .Release.Namespace }}
+  {{- if .Values.keepGlobalSecrets }}
+  annotations:
+    "helm.sh/resource-policy": keep
+  {{- end }}
+type: Opaque
+data:
+
+
+  # NEO4J
+  {{- if not .Values.global.neo4jPassOverride }}
+  {{- $passw := (include "codexo.neo4jrandom" . ) }}
+  {{- $neoauth := (printf "%s%s" "neo4j/" $passw) }}
+  neoauth: {{ $neoauth | b64enc }}
+  neo4jPass: {{ $passw | b64enc }}
+  {{- else }}
+  {{- $passw := .Values.global.neo4jPassOverride }}
+  {{- $neoauth := (printf "%s%s" "neo4j/" $passw) }}
+  neoauth: {{ $neoauth | b64enc }}
+  neo4jPass: {{ $passw | b64enc }}
+  {{- end }}
+
+
+    
+  neo4jname: {{ "neo4j" | b64enc }}
+  # KEYS
+  SECRET_APP_KEY: {{ include "codexo.random" . | b64enc }}
+  
+ 
+  # ELASTICSEACH
+  ELASTIC_USERNAME: {{ "kibana_system" | b64enc }}
+  ELASTIC_PASSWORD: {{ randAlphaNum 20 | b64enc | quote }}
+  LOGSTASH_USERNAME: {{ "logstash_system" | b64enc }}
+  LOGSTASH_PASSWORD: {{ randAlphaNum 20 | b64enc | quote }}
+  LOG_PIPE_USERNAME: {{ "elastic" | b64enc }}
+  LOG_PIPE_PASSWORD: {{ randAlphaNum 20 | b64enc | quote }}
+  

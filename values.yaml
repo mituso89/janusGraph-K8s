@@ -1,0 +1,46 @@
+
+
+serviceAccount:
+  create: true
+
+  annotations: {}
+
+  name: ""
+
+createReleaseNamespace: true
+
+nameOverride: ""
+
+keepGlobalSecrets: false 
+
+
+teEnabled: false
+
+reclaimPolicy: Delete
+
+global:
+  clientName: dg
+  dns: hn-team-db
+  domain: cdxo.eu
+
+
+
+  # LOGSTASH
+  cassandraPort: 9160
+  elasticPort: 9200
+
+  environment: stg
+
+  janusres:
+    requests:
+      cpu: 100m
+      memory: 512Mi
+    
+  ingressRes:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    # limits:
+    #   cpu: 200m
+    #   memory: 256Mi
+

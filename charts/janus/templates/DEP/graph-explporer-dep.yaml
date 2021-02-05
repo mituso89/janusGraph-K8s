@@ -1,0 +1,30 @@
+apiVersion: apps/v1 ## Kubernetes API Version
+kind: Deployment ## Type of resource
+metadata:
+  name: graph-explorer-{{ .Release.Name }}-dep
+  labels:
+    app: graph-explorer-{{ .Release.Name }}-dep ## Labels given by user
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels: ## Should be same as spec.template.labels
+      app: graph-explorer-{{ .Release.Name }}-dep
+  template:
+    metadata:
+      labels: ## Should be same as spec.selector.matchLabels
+        app: graph-explorer-{{ .Release.Name }}-dep
+    spec:
+      containers: # TODO: Add limits & requests
+      - image: invanalabs/graph-explorer
+
+        name:  graph-explorer-{{ .Release.Name }}-chart-cont
+        envFrom:
+        - configMapRef:
+            name: graph-explorer-{{ .Release.Name }}-chart-cfg 
+        ports:
+        - containerPort: 8888
+
+        
+      
+     

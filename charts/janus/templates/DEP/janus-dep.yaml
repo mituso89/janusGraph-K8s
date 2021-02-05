@@ -1,0 +1,41 @@
+apiVersion: apps/v1 ## Kubernetes API Version
+kind: Deployment ## Type of resource
+metadata:
+  name: janus-{{ .Release.Name }}-dep
+  labels:
+    app: janus-{{ .Release.Name }}-dep ## Labels given by user
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels: ## Should be same as spec.template.labels
+      app: janus-{{ .Release.Name }}-dep
+  template:
+    metadata:
+      labels: ## Should be same as spec.selector.matchLabels
+        app: janus-{{ .Release.Name }}-dep
+    spec:
+      containers: # TODO: Add limits & requests
+      - image: {{ .Values.janusImageVersion }}
+
+        name: {{ include "janus.name" . }}-chart-cont
+        envFrom:
+        - configMapRef:
+            name: janus-{{ .Release.Name }}-chart-cfg 
+        env:
+        
+        - name: JANUS_PROPS_TEMPLATE
+          value: cassandra-es
+        - name: janusgraph.storage.backend
+          value: cql
+        - name: janusgraph.storage.hostname
+          value: cassandra-hn-team-db-svc
+        - name: janusgraph.index.search.hostname
+          value: elastic-hn-team-db-svc
+        
+        ports: ## Ports to map
+          - containerPort: 8182
+            name: http
+        
+      
+     

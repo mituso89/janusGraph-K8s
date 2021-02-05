@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: elastic-{{ .Release.Name }}-svc
+  namespace: {{ .Release.Namespace }}
+spec:
+  ports:
+  - name: "http"
+    port: {{ .Values.ports.elastic.http }}
+    targetPort: {{ .Values.ports.elastic.http }}
+  - name: "nodes"
+    port: {{ .Values.ports.elastic.nodes }}
+    targetPort: {{ .Values.ports.elastic.nodes }}
+  selector:
+    app: elastic-{{ .Release.Name }}-dep
+status:
+  loadBalancer: {}

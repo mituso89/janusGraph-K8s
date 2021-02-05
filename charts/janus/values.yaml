@@ -1,0 +1,41 @@
+# Default values for logstash.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+chartEnabled: true 
+
+ports:
+  cassandra:
+    http: 9160
+    nodes: 9042
+  elastic:
+    http: 9200
+    nodes: 9300
+  janus: 
+    http: 8182
+
+
+elastic:
+  config:
+    clusterName: ${CLUSTER_NAME}
+    networkHost: 0.0.0.0
+    xpackLicense: basic
+    xpackSecurity: false
+    xpackMonitoring: true
+
+cassandra:
+  config:
+    httpHost: 0.0.0.0
+    # [ "http://elasticsearch:9200" ]
+    elasticHost: "[ ${ELASTIC_HOST} ]"
+    xpackMonit: true
+
+janusImageVersion: janusgraph/janusgraph:0.5.3 # or neo4j:3.5.0
+replicaCount: 1
+
+
+
+# DEFAULT #TODO: Remove unneded values
+
+nameOverride: ""
+fullnameOverride: ""

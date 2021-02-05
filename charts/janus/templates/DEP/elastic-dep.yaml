@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:    
+  name: elastic-{{ .Release.Name }}-dep
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: elastic-{{ .Release.Name }}-dep
+  strategy: {} #"Recreate" or "RollingUpdate"
+  template:
+    metadata:
+      labels:
+        app: elastic-{{ .Release.Name }}-dep
+    spec:
+      containers:
+      - name: elastic-{{ .Release.Name }}-cont
+        
+        image: docker.elastic.co/elasticsearch/elasticsearch:7.10.1 #7.2.0
+        imagePullPolicy: "IfNotPresent"
+        ports:
+        - containerPort: 9200
+        - containerPort: 9300
+        resources:
+            requests:
+              memory: 4Gi
+            limits:
+              memory: 4Gi
+        env:
+
+        - name: discovery.type
+          value: single-node
+        - name: ES_JAVA_OPTS
+          value: -Xmx256m -Xms256m
+        - name: network.publish_host
+          value: _eth0_
+        - name: ELASTIC_HOST
+          value: elastic-{{ .Release.Name }}-svc:{{ .Values.ports.elastic.http }}
+        - name: CLUSTER_NAME
+          value: elastic-{{ .Release.Name }}-cluster
+        volumeMounts:
+        - name: te-persistent-storage
+          mountPath: /usr/share/elasticsearch/data
+        - name: elastic-config
+          mountPath: /usr/share/elasticsearch/config/elasticsearch.yml
+          subPath: elasticsearch.yml
+      restartPolicy: Always  
+      volumes:
+      - name: te-persistent-storage
+        persistentVolumeClaim:
+          claimName: azsc-{{ .Release.Name }}-pvc
+      - name: elastic-config
+        configMap:
+          name: elastic-{{ .Release.Name }}-cfg
+          items:
+          - key: elasticsearch.yml
+            path: elasticsearch.yml
+          
+        
+        

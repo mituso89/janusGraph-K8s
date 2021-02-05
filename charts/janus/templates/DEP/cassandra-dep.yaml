@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cassandra-{{ .Release.Name }}-dep
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cassandra-{{ .Release.Name }}-dep
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: cassandra-{{ .Release.Name }}-dep
+    spec:
+      containers:
+      - name: cassandra-{{ .Release.Name }}-cont
+        image: cassandra:3.11
+        imagePullPolicy: IfNotPresent
+
+        ports:
+        - containerPort: 9160
+        - containerPort: 9042
+        
+        resources:
+          requests:
+            memory: 4Gi
+
+  
+      restartPolicy: Always

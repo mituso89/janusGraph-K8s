@@ -1,0 +1,20 @@
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: sc-{{ .Release.Name }}-azfiles
+  namespace: {{ .Release.Namespace }}
+provisioner: kubernetes.io/azure-file
+reclaimPolicy: {{ .Values.reclaimPolicy }}
+mountOptions:
+  - dir_mode=0777
+  - file_mode=0777
+  - uid=0
+  - gid=0
+  - mfsymlinks
+  - cache=strict
+  - actimeo=30
+  - nobrl # TODO: TST
+parameters:
+  skuName: Premium_LRS #Premium_LRS #Standard_LRS
+
+

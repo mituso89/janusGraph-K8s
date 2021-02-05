@@ -1,0 +1,34 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: ingress-{{ .Release.Name }}-chart-ingress
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+    nginx.ingress.kubernetes.io/proxy-body-size: "100m" #TODO: How to remove this value?
+    nginx.ingress.kubernetes.io/client-body-buffer-size: "1m" #TODO: How to remove this value?
+    nginx.ingress.kubernetes.io/proxy-buffering: "on"
+    nginx.ingress.kubernetes.io/proxy-buffers-number: "4"
+    nginx.ingress.kubernetes.io/proxy-buffer-size: "1m"
+    nginx.ingress.kubernetes.io/proxy-max-temp-file-size: "1024m"
+
+spec:
+  tls:
+  - hosts:
+    - {{ .Values.global.dns }}
+    secretName: {{ .Release.Name }}-wildlcard-sct
+  rules:
+  - host: {{ .Values.global.dns }}
+    http:
+      paths:
+      - backend:
+          serviceName: janus-{{ .Release.Name }}-chart-svc
+          servicePort: 8182
+        path: /db/(.*)   #($)(.*) #(.*) #(/|$)(.*)
+      - backend:
+          serviceName: graph-explorer-{{ .Release.Name }}-chart-svc
+          servicePort: 8888
+        path: /broswer/(.*)   #($)(.*) #(.*) #(/|$)(.*)
+
+
