@@ -24,7 +24,7 @@ cd janusGraph-K8s
 Start the demo:
 
 ```
-helm upgrade --namespace hn-team-db --install hn-team-db .
+helm upgrade --install hn-team-db .
 ```
 
 The compose file does 3 things: 
