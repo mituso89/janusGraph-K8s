@@ -1,5 +1,5 @@
 # install Janus Graph by K8s
-This is a demo of the [Kong API Gateway](https://konghq.com/) which best practice as a proxy for a public web service as well
+This is a demo of the [JanusGraph](https://docs.janusgraph.org/) which best practice for GraphQL
 
 ## Requirements
   - Linux, macOS, Windows 10
