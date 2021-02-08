@@ -25,7 +25,7 @@ spec:
         env:
         
         - name: GREMLIN_SERVER_URL
-          value: ws://janus-{{ .Release.Name }}-svc:8182/gremlin
+          value: ws://janus-{{ .Release.Name }}-chart-svc:8182/gremlin
         
         ports:
           - containerPort: 8000
