@@ -26,6 +26,18 @@ spec:
         resources:
           requests:
             memory: 4Gi
+        volumeMounts:
+          - name: azsc-persistent-storage
+            mountPath: /cassandra_data
+
 
   
       restartPolicy: Always
+      
+      volumes:
+      - name: azsc-persistent-storage
+        persistentVolumeClaim:
+          claimName: azsc-{{ .Release.Name }}-pvc
+    
+
+      
