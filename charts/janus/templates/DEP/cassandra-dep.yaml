@@ -32,7 +32,7 @@ spec:
 
 
   
-      restartPolicy: Always
+      # restartPolicy: Always
       
       volumes:
       - name: azsc-persistent-storage

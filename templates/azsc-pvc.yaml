@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: azsc-{{ .Release.Name }}-pvc
+  namespace: {{ .Release.Namespace }}
+spec:
+  storageClassName: standard
+  accessModes:
+    - ReadWriteMany # TODO: To Values
+  resources:
+    requests:
+      storage: 100Gi # Premium storage minimum 100Gi
+  

@@ -1,3 +1,4 @@
 acr-sct.yaml
 
-azsc-pvc.yaml
+# azsc-pvc.yaml
+storage-class.yaml
